@@ -1,6 +1,7 @@
 #ifndef CZARZADCA_AGENTOW_H
 #define CZARZADCA_AGENTOW_H
 #include "cobiekt.h"
+#include <ctime>
 
 class CZarzadca_Agentow : public CObiekt
 {
@@ -15,11 +16,12 @@ public:
     static bool czy_wiemy_gdzie_jest_gracz;
     static SKoordynaty_obiektu wspolrzedne_gracza;
 
+    clock_t czas;
+
     virtual Rezultat_Ruchu Ruch(CMapa *mapa)=0;
     void Wyswietl();
 
     virtual bool czy_mozna_za_pomoca_mnie_przegrac();
-    virtual bool czy_mozna_we_mnie_wejsc();
 
     SKoordynaty_obiektu Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa);
     void Ustawiajaca_do_kazdego_agenta_widocznosc(int &rl,int &rp, int &kd, int &kg);

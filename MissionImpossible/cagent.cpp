@@ -8,6 +8,9 @@ CAgent::CAgent(int x, int y, bool orientacja):
 
 Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
 {
+    if( clock() > czas )
+    {
+
     Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(mapa);
 
     SKoordynaty_obiektu aktualne = Get_koordynaty();
@@ -26,6 +29,7 @@ Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
     }else if(czy_wiemy_gdzie_jest_gracz == true)
     {
         aktualne = mapa->Znajdz_najkrotsza_do_gracza(Get_koordynaty(),wspolrzedne_gracza);
+        cout<<wspolrzedne_gracza.R<<" "<<wspolrzedne_gracza.K<<endl;
         Set_koordynaty(aktualne);
     }
 
@@ -42,6 +46,10 @@ Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
                 return Przegrana;
             }
         }
+    }
+
+    czas = clock() + 0.08 * CLOCKS_PER_SEC;
+
     }
 
     return Nic;

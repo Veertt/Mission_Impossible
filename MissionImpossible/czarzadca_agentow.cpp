@@ -13,14 +13,11 @@ CZarzadca_Agentow::CZarzadca_Agentow(int x, int y, bool orientation):
     ktory_agent=ile_agentow;
     ile_agentow++;
     wielkosc_obszaru_poszukiwan = 4;
+
+    czas = clock() + 0.08 * CLOCKS_PER_SEC;
 }
 
 bool CZarzadca_Agentow::czy_mozna_za_pomoca_mnie_przegrac()
-{
-    return true;
-}
-
-bool CZarzadca_Agentow::czy_mozna_we_mnie_wejsc()
 {
     return true;
 }
