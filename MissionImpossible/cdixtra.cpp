@@ -168,3 +168,13 @@ void CDixtra::Wyswietl_tablice()
 
     cout<<endl;
 }
+
+CDixtra::~CDixtra()
+{
+    for(int i = 0; i<liczba_Wierszy_Mapy; i++)
+    {
+        delete [] tablica [i];
+    }
+
+    delete [] tablica;
+}

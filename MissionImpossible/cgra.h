@@ -1,6 +1,8 @@
 #ifndef CGRA_H
 #define CGRA_H
 #include <windows.h>
+#include <conio.h>
+#include <cstdlib>
 #include "cmapa.h"
 #include "cobiekt.h"
 
@@ -17,9 +19,13 @@ private:
     bool poziom_trudnosci;
     CMapa map;
 
+    bool Wstep();
+    void Przedstawienie_zasad_gry(int &wybor);
+
     void Wyswietl_aktualna();
     void Ruch_obiektow();
     void Ustawienie_obiektow();
+
 
 public:
     CGra();

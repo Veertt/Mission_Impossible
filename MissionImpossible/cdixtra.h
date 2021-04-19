@@ -28,7 +28,9 @@ public:
     void Ustawiajaca_tablice();
 
     SKoordynaty_obiektu Get_tablica_poprzednik(SKoordynaty_obiektu obecne);
-    void Wyswietl_tablice();
+    void Wyswietl_tablice();//niepotrzebne
+
+    ~CDixtra();
 
 };
 

@@ -2,30 +2,123 @@
 
 CGra::CGra()
 {
-    cout<<"Opracowal: Bartlomiej Gus gr.IPAUT-151 nr albumu: 297415"<<endl;
+    cout<<"Opracowal: Bartlomiej Gus gr.IPAUT-161 nr albumu: 297415"<<endl;
     cout<<"Witaj w MissionImpossible!"<<endl;
 
-    koniec.czy_wygrales = false;
-    koniec.czy_przegrales = false;
+    //bool czy_gramy  = Wstep(); - powoduje wlaczenie menu
+
+    bool czy_gramy = true; // usun to jak wlaczysz to wyzej
+
+    if(czy_gramy == true)
+    {
+        koniec.czy_wygrales = false;
+        koniec.czy_przegrales = false;
+
+        do
+        {
+            Wyswietl_aktualna();
+            Ruch_obiektow();
+            Ustawienie_obiektow();
+        }
+        while(koniec.czy_wygrales == false&&koniec.czy_przegrales == false);
+
+        if(koniec.czy_wygrales == true)
+        {
+            Wyswietl_aktualna();
+            cout<<"Brawo, wygrales!";
+        }
+        else if(koniec.czy_przegrales == true)
+        {
+            Wyswietl_aktualna();
+            cout<<"Niestety przegrales.";
+        }
+    }
+
+    cout<<endl;
+    exit(0);
+}
+
+bool CGra::Wstep()
+{
+    int  wybor_uzytkownika;
+    bool czy_gramy_czy_nie = true;
 
     do
     {
-        Wyswietl_aktualna();
-        Ruch_obiektow();
-        Ustawienie_obiektow();
-    }
-    while(koniec.czy_wygrales == false&&koniec.czy_przegrales == false);
+        cout<<endl;
+        gotoxy(0,2);
+        cout<<"Nacisniecie przycisku t spowoduje wlaczenie gry."<<endl;
+        cout<<"Nacisniecie przycisku z spowoduje pokazanie zasad gry."<<endl;
+        cout<<"Nacisniecie przycisku ESC spowoduje wyjscie z gry."<<endl;
 
-    if(koniec.czy_wygrales == true)
+        wybor_uzytkownika = getch();
+
+    }while(!(wybor_uzytkownika==116||wybor_uzytkownika==122||wybor_uzytkownika==27));
+
+    if(wybor_uzytkownika==122)
     {
-        Wyswietl_aktualna();
-        cout<<"Brawo, wygrales!";
+        Przedstawienie_zasad_gry(wybor_uzytkownika);
     }
-    else if(koniec.czy_przegrales == true)
+
+    if(wybor_uzytkownika==27)
     {
-        Wyswietl_aktualna();
-        cout<<"Niestety przegrales.";
+        system("cls");
+        cout<<"Wyszedles z gry, do zobaczenia!";
+        czy_gramy_czy_nie = false;
+        return czy_gramy_czy_nie;
     }
+
+    do
+    {
+        system("cls");
+        cout<<"Opracowal: Bartlomiej Gus gr.IPAUT-161 nr albumu: 297415"<<endl<<endl;
+        cout<<"Nacisniecie przycisku 0 spowoduje latwy tryb gry."<<endl;
+        cout<<"Nacisniecie przycisku 1 spowoduje trudny tryb gry."<<endl;
+
+        wybor_uzytkownika = getch();
+
+    }while(!(wybor_uzytkownika==48||wybor_uzytkownika==49));
+
+    if(wybor_uzytkownika==48)
+    {
+        poziom_trudnosci == 0;
+    }
+    else if(wybor_uzytkownika==49)
+    {
+        poziom_trudnosci == 1;
+    }
+
+    return czy_gramy_czy_nie;
+}
+
+void CGra::Przedstawienie_zasad_gry(int &wybor)
+{
+    do
+    {
+        system("cls");
+        ifstream plik ("zasady_gry.txt");
+
+        if(plik.good()==true)
+        {
+            string pom = "";
+
+            while(getline(plik,pom))
+            {
+                cout<<pom<<endl;
+            }
+        }
+
+        cout<<endl;
+
+        cout<<"Nacisniecie przycisku t spowoduje wlaczenie gry."<<endl;
+        cout<<"Nacisniecie przycisku ESC spowoduje wyjscie z gry."<<endl;
+
+        wybor = getch();
+
+        plik.close();
+
+    }while(!(wybor==116||wybor==27));
+
 }
 
 void CGra::Wyswietl_aktualna()

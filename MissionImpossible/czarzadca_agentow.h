@@ -20,7 +20,7 @@ public:
 
     virtual bool czy_mozna_za_pomoca_mnie_przegrac();
 
-    SKoordynaty_obiektu Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa);
+    void Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa);
     void Ustawiajaca_do_kazdego_agenta_widocznosc(int &rl,int &rp, int &kd, int &kg);
     //bool Czy_na_pewno_widze_agenta(CMapa *mapa,int rl, int rp, int kg, int kd);
 };

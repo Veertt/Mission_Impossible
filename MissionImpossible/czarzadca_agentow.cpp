@@ -25,7 +25,7 @@ void CZarzadca_Agentow::Wyswietl()
     cout<<"A";
 }
 
-SKoordynaty_obiektu CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa)
+void CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa)
 {
     int ktory_rzad = 0;
     int ktora_kolumna = 0;
@@ -38,7 +38,6 @@ SKoordynaty_obiektu CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(C
 
     SKoordynaty_obiektu aktualne = Get_koordynaty();
 
-    //czy_wiemy_gdzie_jest_gracz = false;
     for(int i = aktualne.R-rlewo;i<aktualne.R+rprawo;i++)
     {
         for(int j = aktualne.K-kdol;j<aktualne.K+kgora;j++)
@@ -82,6 +81,7 @@ SKoordynaty_obiektu CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(C
                 czy_wiemy_gdzie_jest_gracz = true;
                 wspolrzedne_gracza.R = ktory_rzad;
                 wspolrzedne_gracza.K = ktora_kolumna;
+                return;
             }
         }
     }

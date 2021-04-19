@@ -7,6 +7,10 @@ using namespace std::chrono;
 
 class CAgent : public CZarzadca_Agentow
 {
+private:
+    static const system_clock::duration krok;
+    system_clock::time_point czas;
+
 public:
     CAgent(int x, int y, bool orientacja);
 
@@ -14,10 +18,6 @@ public:
 
     SKoordynaty_obiektu do_Ruchu_dla_pionowych(CMapa* mapa);
     SKoordynaty_obiektu do_Ruchu_dla_poziomych(CMapa* mapa);
-
-private:
-    static const system_clock::duration krok;
-    system_clock::time_point czas;
 };
 
 #endif // CAGENT_H
