@@ -13,8 +13,6 @@ CZarzadca_Agentow::CZarzadca_Agentow(int x, int y, bool orientation):
     ktory_agent=ile_agentow;
     ile_agentow++;
     wielkosc_obszaru_poszukiwan = 4;
-
-    czas = clock() + 0.08 * CLOCKS_PER_SEC;
 }
 
 bool CZarzadca_Agentow::czy_mozna_za_pomoca_mnie_przegrac()
@@ -40,6 +38,7 @@ SKoordynaty_obiektu CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(C
 
     SKoordynaty_obiektu aktualne = Get_koordynaty();
 
+    //czy_wiemy_gdzie_jest_gracz = false;
     for(int i = aktualne.R-rlewo;i<aktualne.R+rprawo;i++)
     {
         for(int j = aktualne.K-kdol;j<aktualne.K+kgora;j++)

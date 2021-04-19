@@ -49,10 +49,12 @@ void CGra::Ruch_obiektow()
                 if(rezultat_aktualny==Przegrana)
                 {
                     koniec.czy_przegrales = true;
+                    return;
                 }
                 else if(rezultat_aktualny==Wygrana)
                 {
                     koniec.czy_wygrales = true;
+                    return;
                 }
             }
         }
@@ -92,4 +94,3 @@ void gotoxy( int x, int y )
     c.Y = y;
     SetConsoleCursorPosition( GetStdHandle( STD_OUTPUT_HANDLE ), c );
 }
-

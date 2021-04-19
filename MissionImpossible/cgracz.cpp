@@ -49,14 +49,14 @@ Rezultat_Ruchu CGracz::Ruch(CMapa *mapa)
 
     if(pom!=NULL)
     {
-        if(!pom->czy_mozna_we_mnie_wejsc())
+        if(pom->czy_za_pomoca_mnie_mozna_wygrac())
+        {
+            return Wygrana;
+        }
+        else if(!pom->czy_mozna_we_mnie_wejsc())
         {
             aktualne = poprzednie;
             Set_koordynaty(aktualne);
-        }
-        else if(pom->czy_za_pomoca_mnie_mozna_wygrac())
-        {
-            return Wygrana;
         }
     }
 
