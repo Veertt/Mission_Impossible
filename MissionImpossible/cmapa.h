@@ -25,7 +25,7 @@ private:
     CObiekt ***mapa;
 
     SWielkosc_mapy Sprawdz_jak_duza(string nazwa);
-    CObiekt ***Wczytaj_mape(string nazwa);
+    CObiekt ***Wczytaj_mape(string nazwa, int szybkosc_agenta);
 
     CDixtra dixtra;
 
@@ -39,6 +39,8 @@ public:
 
     CObiekt *Get_co_jest_na_mapie(int x, int y);
     void Set_na_mape(SKoordynaty_obiektu polozenie, CObiekt *obj);
+
+    void Wczytaj_w_zaleznosci_do_pozimou_trudnosci(bool jaki_poziom);
 
     void Wyswietl();
 

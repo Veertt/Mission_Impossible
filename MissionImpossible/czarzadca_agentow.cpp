@@ -5,42 +5,111 @@ int CZarzadca_Agentow::ile_agentow = 0;
 bool CZarzadca_Agentow::czy_wiemy_gdzie_jest_gracz = false;
 SKoordynaty_obiektu CZarzadca_Agentow::wspolrzedne_gracza = {INT_MAX,INT_MAX};
 
-CZarzadca_Agentow::CZarzadca_Agentow(int x, int y, bool orientation):
-    CObiekt(x,y)
+CZarzadca_Agentow::CZarzadca_Agentow()
 {
-    orientacja = orientation;
-    w_ktora_strone = false;
-    ktory_agent=ile_agentow;
-    ile_agentow++;
-    wielkosc_obszaru_poszukiwan = 4;
+    head = NULL;
 }
 
-bool CZarzadca_Agentow::czy_mozna_za_pomoca_mnie_przegrac()
+void CZarzadca_Agentow::Dodaj_kolejnego_agenta(int ktory)
 {
-    return true;
+    SLista_Agentow *aktualny = NULL;
+
+    if(head==NULL)
+    {
+        head = new SLista_Agentow;
+        aktualny = head;
+    }
+    else
+    {
+        aktualny = head;
+        while(aktualny->next!=NULL)
+        {
+            aktualny = aktualny->next;
+        }
+        aktualny->next = new SLista_Agentow;
+        aktualny = aktualny->next;
+    }
+
+    aktualny->czy_wiem_gdzie_jest_gracz = false;
+    aktualny->ktorym_agentem_jestem = ktory;
+
+    aktualny->next = NULL;
+}
+
+void CZarzadca_Agentow::Dodaj_ze_zobaczylem_gracza(int ktory)
+{
+    SLista_Agentow *aktualny = head;
+
+    while(aktualny->ktorym_agentem_jestem!=ktory)
+    {
+        aktualny = aktualny->next;
+    }
+
+    aktualny->czy_wiem_gdzie_jest_gracz = true;
+}
+
+void CZarzadca_Agentow::Zmien_ze_nie_widze_gracza(int ktory)
+{
+    SLista_Agentow *aktualny = head;
+
+    while(aktualny->ktorym_agentem_jestem!=ktory)
+    {
+        aktualny = aktualny->next;
+    }
+
+    aktualny->czy_wiem_gdzie_jest_gracz = false;
+}
+
+void CZarzadca_Agentow::Aktualizujaca_czy_na_pewno_nadal_widze_gracza()
+{
+    SLista_Agentow *aktualny = head;
+
+    while(aktualny!=NULL)
+    {
+        if(aktualny->czy_wiem_gdzie_jest_gracz == true)
+        {
+            return;
+        }
+
+        aktualny = aktualny->next;
+    }
+
+    czy_wiemy_gdzie_jest_gracz = false;
+    wspolrzedne_gracza.R = INT_MAX;
+    wspolrzedne_gracza.K = INT_MAX;
 }
 
 void CZarzadca_Agentow::Wyswietl()
 {
-    cout<<"A";
+    SLista_Agentow *aktualny = head;
+
+    int licznik = 0;
+
+    while(aktualny!=0)
+    {
+        cout<<aktualny->czy_wiem_gdzie_jest_gracz<<" "<<aktualny->ktorym_agentem_jestem<<endl;
+        aktualny = aktualny->next;
+        licznik++;
+    }
 }
 
-void CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa)
+void CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa, int wielkosc_obszaru, SKoordynaty_obiektu aktualne, bool orientacja, bool w_ktora_strone, int ktory)
 {
-    int ktory_rzad = 0;
-    int ktora_kolumna = 0;
-    int rlewo = wielkosc_obszaru_poszukiwan;
-    int rprawo = wielkosc_obszaru_poszukiwan;
-    int kgora = wielkosc_obszaru_poszukiwan;
-    int kdol = wielkosc_obszaru_poszukiwan;
+    int ktory_rzad = INT_MAX;
+    int ktora_kolumna = INT_MAX;
+    int klewo = wielkosc_obszaru;
+    int kprawo = wielkosc_obszaru;
+    int rgora = wielkosc_obszaru;
+    int rdol = wielkosc_obszaru;
 
-    Ustawiajaca_do_kazdego_agenta_widocznosc(rlewo,rprawo,kdol,kgora);
-
-    SKoordynaty_obiektu aktualne = Get_koordynaty();
-
-    for(int i = aktualne.R-rlewo;i<aktualne.R+rprawo;i++)
+    if(czy_wiemy_gdzie_jest_gracz == false)
     {
-        for(int j = aktualne.K-kdol;j<aktualne.K+kgora;j++)
+        Ustawiajaca_do_kazdego_agenta_widocznosc(klewo,kprawo,rgora,rdol,orientacja, w_ktora_strone);
+    }
+
+    for(int i = aktualne.R-rgora;i<=aktualne.R+rdol;i++)
+    {
+        for(int j = aktualne.K-klewo;j<=aktualne.K+kprawo;j++)
         {
             if(i<mapa->Get_liczba_Wierszy()&&i>=0)
             {
@@ -81,32 +150,47 @@ void CZarzadca_Agentow::Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa)
                 czy_wiemy_gdzie_jest_gracz = true;
                 wspolrzedne_gracza.R = ktory_rzad;
                 wspolrzedne_gracza.K = ktora_kolumna;
+                Dodaj_ze_zobaczylem_gracza(ktory);
                 return;
             }
         }
     }
+
+    Zmien_ze_nie_widze_gracza(ktory);
 }
 
-void CZarzadca_Agentow::Ustawiajaca_do_kazdego_agenta_widocznosc(int &rl, int &rp, int &kd, int &kg)
+void CZarzadca_Agentow::Ustawiajaca_do_kazdego_agenta_widocznosc(int &kl, int &kp, int &rg, int &rd, bool orientacja, bool w_ktora_strone)
 {
-    if(orientacja==false&&w_ktora_strone==false)
+    if(orientacja==false&&w_ktora_strone==false)// ide w dol
     {
-       kd = 0;
+       rg = 0;
     }
 
-    if(orientacja==false&&w_ktora_strone==true)
+    if(orientacja==false&&w_ktora_strone==true)// ide w gore
     {
-        kg = 0;
+        rd = 0;
     }
 
-    if(orientacja==true&&w_ktora_strone==false)
+    if(orientacja==true&&w_ktora_strone==false)// ide w prawo
     {
-        rl = 0;
+        kl = 0;
     }
 
-    if(orientacja==true&&w_ktora_strone==true)
+    if(orientacja==true&&w_ktora_strone==true)// ide w lewo
     {
-        rp = 0;
+        kp = 0;
+    }
+}
+
+CZarzadca_Agentow::~CZarzadca_Agentow()
+{
+    SLista_Agentow *aktualny = head;
+
+    while(aktualny!=0)
+    {
+        head=aktualny->next;
+        delete aktualny;
+        aktualny = head;
     }
 }
 
@@ -118,16 +202,16 @@ bool CZarzadca_Agentow::Czy_na_pewno_widze_agenta(CMapa *mapa, int rl, int rp, i
     bool **mapa_widocznosci;
     if(orientacja == false)
     {
-        mapa_widocznosci = new bool *[wielkosc_obszaru_poszukiwan];
+        mapa_widocznosci = new bool *[wielkosc_obszaru];
 
         for(int i = koordynaty.R-rl; i<koordynaty.R+rp;i++)
         {
             mapa_widocznosci[i] = new bool [];
         }
 
-        for(int i = 0;i<wielkosc_obszaru_poszukiwan;i++)
+        for(int i = 0;i<wielkosc_obszaru;i++)
         {
-            for(int j = 0;j<2*wielkosc_obszaru_poszukiwan;j++)
+            for(int j = 0;j<2*wielkosc_obszaru;j++)
             {
                 mapa_widocznosci[i][j] = false;
             }

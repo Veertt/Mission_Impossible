@@ -1,39 +1,55 @@
 #include "cagent.h"
 #include "cmapa.h"
 
-const system_clock::duration CAgent::krok = milliseconds(120);
+CZarzadca_Agentow CAgent::zarzadca;
 
-CAgent::CAgent(int x, int y, bool orientacja):
-    CZarzadca_Agentow(x,y,orientacja),
-    czas(system_clock::now() + krok)
+CAgent::CAgent(int x, int y, bool orientation, int krok_agenta):
+    CObiekt(x,y)
 {
+    orientacja = orientation;
+    w_ktora_strone = false;
+    ktory_agent=zarzadca.ile_agentow;
+    zarzadca.Dodaj_kolejnego_agenta(ktory_agent);
+    zarzadca.ile_agentow++;
+    wielkosc_obszaru_poszukiwan = 3;
+
+    krok = milliseconds(krok_agenta);
+    czas = system_clock::now() + krok;
 }
 
-Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
+void CAgent::Wyswietl()
+{
+    cout<<"A";
+}
+
+bool CAgent::czy_mozna_za_pomoca_mnie_przegrac()
+{
+    return true;
+}
+
+bool CAgent::czy_mozna_we_mnie_wejsc()
+{
+    return false;
+}
+
+Rezultat_Ruchu CAgent::Ruch(CMapa* mapa) //zmiana
 {
     auto aktualny_czas = system_clock::now();
 
-    for(int i = Get_koordynaty().R-1; i<=Get_koordynaty().R+1; i++)
-    {
-       for(int j = Get_koordynaty().K-1; j<=Get_koordynaty().K+1; j++)
-       {
-            CObiekt* pom = mapa->Get_co_jest_na_mapie(i,j);
-
-            if(pom!=NULL&&pom->czy_mozna_mnie_sledzic())
-            {
-                return Przegrana;
-            }
-        }
-   }
-
     if( aktualny_czas > czas )
     {
-        Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(mapa);
+        zarzadca.Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(mapa, wielkosc_obszaru_poszukiwan, Get_koordynaty(),orientacja,w_ktora_strone, ktory_agent);
+        zarzadca.Aktualizujaca_czy_na_pewno_nadal_widze_gracza();
 
         SKoordynaty_obiektu aktualne = Get_koordynaty();
 
-        if(czy_wiemy_gdzie_jest_gracz == false)
+        if(zarzadca.czy_wiemy_gdzie_jest_gracz == false)
         {
+            if(wielkosc_obszaru_poszukiwan!=3)
+            {
+                wielkosc_obszaru_poszukiwan = 3;
+            }
+
             if(orientacja == false)
             {
                 aktualne = do_Ruchu_dla_pionowych(mapa);
@@ -43,9 +59,14 @@ Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
                 aktualne = do_Ruchu_dla_poziomych(mapa);
             }
 
-        }else if(czy_wiemy_gdzie_jest_gracz == true)
+        }else if(zarzadca.czy_wiemy_gdzie_jest_gracz == true)
         {
-            aktualne = mapa->Znajdz_najkrotsza_do_gracza(Get_koordynaty(),wspolrzedne_gracza);
+            if(wielkosc_obszaru_poszukiwan!=5)
+            {
+                wielkosc_obszaru_poszukiwan = 5;
+            }
+
+            aktualne = mapa->Znajdz_najkrotsza_do_gracza(Get_koordynaty(),zarzadca.wspolrzedne_gracza);
         }
 
         Set_koordynaty(aktualne);
@@ -56,7 +77,7 @@ Rezultat_Ruchu CAgent::Ruch(CMapa* mapa)
            {
                 CObiekt* pom = mapa->Get_co_jest_na_mapie(i,j);
 
-                if(pom!=NULL&&pom->czy_mozna_mnie_sledzic())
+                if(pom!=NULL&&pom->czy_mozna_mnie_sledzic()==true)
                 {
                     return Przegrana;
                 }

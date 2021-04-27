@@ -1,28 +1,39 @@
 #ifndef CZARZADCA_AGENTOW_H
 #define CZARZADCA_AGENTOW_H
-#include "cobiekt.h"
+#include "SKoordynaty.h"
 
-class CZarzadca_Agentow : public CObiekt
+struct SLista_Agentow
 {
-protected:
-    bool orientacja;
-    bool w_ktora_strone;
-    int ktory_agent;
-    int wielkosc_obszaru_poszukiwan;
+    bool czy_wiem_gdzie_jest_gracz;
+    int ktorym_agentem_jestem;
+    SLista_Agentow *next;
+};
+
+class CMapa;
+
+class CZarzadca_Agentow
+{
+private:
+    SLista_Agentow *head;
+
 public:
-    CZarzadca_Agentow(int x, int y, bool orientation);
+    CZarzadca_Agentow();
     static int ile_agentow;
     static bool czy_wiemy_gdzie_jest_gracz;
     static SKoordynaty_obiektu wspolrzedne_gracza;
 
-    virtual Rezultat_Ruchu Ruch(CMapa *mapa)=0;
-    void Wyswietl();
+    void Dodaj_kolejnego_agenta(int ktory);
+    void Dodaj_ze_zobaczylem_gracza(int ktory);
+    void Zmien_ze_nie_widze_gracza(int ktory);
+    void Aktualizujaca_czy_na_pewno_nadal_widze_gracza();
 
-    virtual bool czy_mozna_za_pomoca_mnie_przegrac();
+    void Wyswietl();//niepotrzebne
 
-    void Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa);
-    void Ustawiajaca_do_kazdego_agenta_widocznosc(int &rl,int &rp, int &kd, int &kg);
+    void Sprawdzajaca_czy_wiemy_gdzie_jest_gracz(CMapa *mapa, int wielkosc_obszaru, SKoordynaty_obiektu aktualne, bool orientacja, bool w_ktora_strone, int ktory);
+    void Ustawiajaca_do_kazdego_agenta_widocznosc(int &kl, int &kp, int &rg, int &rd, bool orientacja, bool w_ktora_strone);
     //bool Czy_na_pewno_widze_agenta(CMapa *mapa,int rl, int rp, int kg, int kd);
+
+    ~CZarzadca_Agentow();
 };
 
 #endif // CZARZADCA_AGENTOW_H

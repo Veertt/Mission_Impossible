@@ -15,9 +15,13 @@ bool CGracz::czy_mozna_mnie_sledzic()
     return true;
 }
 
-Rezultat_Ruchu CGracz::Ruch(CMapa *mapa)
+bool CGracz::czy_mozna_we_mnie_wejsc() //zmiana
 {
-    SKoordynaty_obiektu poprzednie = Get_koordynaty();
+    return false;
+}
+
+Rezultat_Ruchu CGracz::Ruch(CMapa *mapa) //zmiana
+{
     SKoordynaty_obiektu aktualne = Get_koordynaty();
 
     if(kbhit())
@@ -47,17 +51,9 @@ Rezultat_Ruchu CGracz::Ruch(CMapa *mapa)
     CObiekt *pom = mapa->Get_co_jest_na_mapie(aktualne.R,aktualne.K);
     Set_koordynaty(aktualne);
 
-    if(pom!=NULL)
+    if(pom!=NULL&&pom->czy_za_pomoca_mnie_mozna_wygrac())
     {
-        if(pom->czy_za_pomoca_mnie_mozna_wygrac())
-        {
-            return Wygrana;
-        }
-        else if(!pom->czy_mozna_we_mnie_wejsc())
-        {
-            aktualne = poprzednie;
-            Set_koordynaty(aktualne);
-        }
+        return Wygrana;
     }
 
     return Nic;

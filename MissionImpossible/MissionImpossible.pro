@@ -17,23 +17,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp \
-    cagent.cpp \
-    cdixtra.cpp \
-    cgra.cpp \
-    cgracz.cpp \
-    cmapa.cpp \
-    cmeta.cpp \
-    cobiekt.cpp \
+    czarzadca_agentow.cpp \
     csciana.cpp \
-    czarzadca_agentow.cpp
+    cobiekt.cpp \
+    cmeta.cpp \
+    cmapa.cpp \
+    cgracz.cpp \
+    cgra.cpp \
+    cdixtra.cpp \
+    cagent.cpp
 
 HEADERS += \
-    cagent.h \
-    cdixtra.h \
-    cgra.h \
-    cgracz.h \
-    cmapa.h \
-    cmeta.h \
-    cobiekt.h \
+    czarzadca_agentow.h \
     csciana.h \
-    czarzadca_agentow.h
+    cobiekt.h \
+    cmeta.h \
+    cmapa.h \
+    cgracz.h \
+    cgra.h \
+    cdixtra.h \
+    cagent.h \
+    SKoordynaty.h

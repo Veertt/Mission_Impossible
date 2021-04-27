@@ -1,6 +1,7 @@
 #ifndef COBIEKT_H
 #define COBIEKT_H
 #include <iostream>
+#include "SKoordynaty.h"
 
 using namespace std;
 
@@ -9,12 +10,6 @@ enum Rezultat_Ruchu
     Nic,
     Przegrana,
     Wygrana
-};
-
-struct SKoordynaty_obiektu
-{
-    int R;
-    int K;
 };
 
 class CMapa;

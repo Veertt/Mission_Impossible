@@ -13,6 +13,7 @@ public:
     virtual Rezultat_Ruchu Ruch(CMapa* mapa);
     virtual void Wyswietl();
     virtual bool czy_mozna_mnie_sledzic();
+    virtual bool czy_mozna_we_mnie_wejsc(); //zmiana
 };
 
 #endif // CGRACZ_H

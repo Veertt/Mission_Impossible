@@ -5,12 +5,11 @@ CGra::CGra()
     cout<<"Opracowal: Bartlomiej Gus gr.IPAUT-161 nr albumu: 297415"<<endl;
     cout<<"Witaj w MissionImpossible!"<<endl;
 
-    //bool czy_gramy  = Wstep(); - powoduje wlaczenie menu
-
-    bool czy_gramy = true; // usun to jak wlaczysz to wyzej
+    bool czy_gramy  = Wstep();
 
     if(czy_gramy == true)
     {
+        map.Wczytaj_w_zaleznosci_do_pozimou_trudnosci(poziom_trudnosci);
         koniec.czy_wygrales = false;
         koniec.czy_przegrales = false;
 
@@ -81,11 +80,11 @@ bool CGra::Wstep()
 
     if(wybor_uzytkownika==48)
     {
-        poziom_trudnosci == 0;
+        poziom_trudnosci = 0;
     }
     else if(wybor_uzytkownika==49)
     {
-        poziom_trudnosci == 1;
+        poziom_trudnosci = 1;
     }
 
     return czy_gramy_czy_nie;
@@ -169,11 +168,15 @@ void CGra::Ustawienie_obiektow()
                 koordynaty_obiektu_na_mapie.K = j;
 
                 SKoordynaty_obiektu koordynaty_obiektu_w_obiekcie = pom->Get_koordynaty();
-
-                if(koordynaty_obiektu_w_obiekcie.R!=i||koordynaty_obiektu_w_obiekcie.K!=j)
+                CObiekt* pom2 = map.Get_co_jest_na_mapie(koordynaty_obiektu_w_obiekcie.R, koordynaty_obiektu_w_obiekcie.K);
+                if((pom2 == NULL || pom2->czy_mozna_we_mnie_wejsc()) && (koordynaty_obiektu_w_obiekcie.R!=i||koordynaty_obiektu_w_obiekcie.K!=j)) //zmiana
                 {
                     map.Set_na_mape(koordynaty_obiektu_w_obiekcie,pom);
                     map.Set_na_mape(koordynaty_obiektu_na_mapie,NULL);
+                }
+                else
+                {
+                    pom->Set_koordynaty(koordynaty_obiektu_na_mapie);
                 }
             }
         }

@@ -1,20 +1,31 @@
 #ifndef CAGENT_H
 #define CAGENT_H
+#include "cobiekt.h"
 #include "czarzadca_agentow.h"
 #include <chrono>
 
 using namespace std::chrono;
 
-class CAgent : public CZarzadca_Agentow
+class CAgent : public CObiekt
 {
 private:
-    static const system_clock::duration krok;
+    system_clock::duration krok;
     system_clock::time_point czas;
 
+    bool orientacja;
+    bool w_ktora_strone;
+    int ktory_agent;
+    int wielkosc_obszaru_poszukiwan;
+
 public:
-    CAgent(int x, int y, bool orientacja);
+    CAgent(int x, int y, bool orientation, int krok_agenta);
 
     virtual Rezultat_Ruchu Ruch(CMapa* mapa);
+    virtual void Wyswietl();
+    virtual bool czy_mozna_za_pomoca_mnie_przegrac();
+    virtual bool czy_mozna_we_mnie_wejsc();
+
+    static CZarzadca_Agentow zarzadca;
 
     SKoordynaty_obiektu do_Ruchu_dla_pionowych(CMapa* mapa);
     SKoordynaty_obiektu do_Ruchu_dla_poziomych(CMapa* mapa);

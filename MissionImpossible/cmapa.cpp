@@ -2,10 +2,6 @@
 
 CMapa::CMapa()
 {
-    SWielkosc_mapy wielkosc = Sprawdz_jak_duza("mapa.txt");
-    liczba_Wierszy = wielkosc.ile_Linijek;
-    liczba_Kolumn = wielkosc.ile_Kolumn;
-    mapa = Wczytaj_mape("mapa.txt");
 }
 
 int CMapa::Get_liczba_Wierszy()
@@ -48,14 +44,14 @@ SWielkosc_mapy CMapa::Sprawdz_jak_duza(string nazwa)
             }
         }
     }
-
     plik.close();
 
     return licznik;
 }
 
-CObiekt ***CMapa::Wczytaj_mape(string nazwa)
+CObiekt ***CMapa::Wczytaj_mape(string nazwa, int szybkosc_agenta)
 {
+
     ifstream plik (nazwa.c_str());
 
     CObiekt* **tablica = new CObiekt* *[liczba_Wierszy];
@@ -81,10 +77,10 @@ CObiekt ***CMapa::Wczytaj_mape(string nazwa)
                 switch (pom[i])
                 {
                     case 'V':
-                        objekt = new CAgent(licznik,i,false);
+                        objekt = new CAgent(licznik,i,false,szybkosc_agenta);
                         break;
                     case 'H':
-                        objekt = new CAgent(licznik,i,true);
+                        objekt = new CAgent(licznik,i,true,szybkosc_agenta);
                         break;
                     case 'G':
                         objekt = new CGracz(licznik,i);
@@ -109,6 +105,10 @@ CObiekt ***CMapa::Wczytaj_mape(string nazwa)
     plik.close();
 
     return tablica;
+
+    plik.close();
+
+    return tablica;
 }
 
 CObiekt *CMapa::Get_co_jest_na_mapie(int x, int y)
@@ -119,6 +119,28 @@ CObiekt *CMapa::Get_co_jest_na_mapie(int x, int y)
 void CMapa::Set_na_mape(SKoordynaty_obiektu polozenie, CObiekt *obj)
 {
     mapa[polozenie.R][polozenie.K] = obj;
+}
+
+void CMapa::Wczytaj_w_zaleznosci_do_pozimou_trudnosci(bool jaki_poziom)
+{
+    int szybkosc_agenta = 0;
+
+    if(jaki_poziom == false)
+    {
+        szybkosc_agenta = 150;
+        SWielkosc_mapy wielkosc = Sprawdz_jak_duza("mapa.txt");
+        liczba_Wierszy = wielkosc.ile_Linijek;
+        liczba_Kolumn = wielkosc.ile_Kolumn;
+        mapa = Wczytaj_mape("mapa.txt",szybkosc_agenta);
+    }
+    else if (jaki_poziom == true)
+    {
+        szybkosc_agenta = 110;
+        SWielkosc_mapy wielkosc = Sprawdz_jak_duza("mapa2.txt");
+        liczba_Wierszy = wielkosc.ile_Linijek;
+        liczba_Kolumn = wielkosc.ile_Kolumn;
+        mapa = Wczytaj_mape("mapa2.txt",szybkosc_agenta);
+    }
 }
 
 void CMapa::Wyswietl()
